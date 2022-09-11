@@ -1,7 +1,7 @@
 resource "helm_release" "nginx-ingress-internal" {
   name             = "ingress-nginx-internal"
   chart            = "ingress-nginx"
-  version          = "4.0.16"
+  version          = "4.2.5"
   repository       = "https://kubernetes.github.io/ingress-nginx"
   namespace        = "ingress"
   create_namespace = true

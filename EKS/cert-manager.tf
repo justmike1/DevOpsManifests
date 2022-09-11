@@ -5,7 +5,7 @@ resource "kubernetes_namespace" "cm" {
 }
 
 resource "helm_release" "cm" {
-  count            = var.actions_runner_controller
+  count            = var.enable_addons
   name             = "cm"
   namespace        = kubernetes_namespace.cm.metadata[0].name
   create_namespace = true

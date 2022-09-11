@@ -17,6 +17,12 @@ variable "cluster_addons" {
   }
 }
 
+variable "enable_addons" {
+  description = "If to enable addons like github runner"
+  type        = number
+  default     = 0
+}
+
 variable "num_zones" {
   description = "How many zones should we utilize for the eks nodes"
   type        = number
@@ -26,7 +32,7 @@ variable "num_zones" {
 variable "k8s_version" {
   description = "Which version of k8s to install by default"
   type        = string
-  default     = "1.22"
+  default     = "1.23"
 }
 
 variable "cluster_name" {

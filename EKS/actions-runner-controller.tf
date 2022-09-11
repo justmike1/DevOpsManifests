@@ -14,7 +14,7 @@ resource "kubernetes_namespace" "arc" {
 }
 
 resource "helm_release" "actions-runner-controller" {
-  count            = var.actions_runner_controller
+  count            = var.enable_addons
   name             = "actions-runner-controller"
   namespace        = kubernetes_namespace.arc.metadata[0].name
   create_namespace = true

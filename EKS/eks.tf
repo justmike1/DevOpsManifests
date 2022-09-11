@@ -97,11 +97,7 @@ resource "aws_eks_addon" "this" {
   resolve_conflicts        = lookup(each.value, "resolve_conflicts", null)
   service_account_role_arn = lookup(each.value, "service_account_role_arn", null)
 
-  lifecycle {
-    ignore_changes = [
-      modified_at
-    ]
-  }
+  lifecycle {}
   tags = { Terraform = "True" }
 
   depends_on = [module.eks]
