@@ -7,8 +7,8 @@ resource "helm_release" "metrics" {
 
   values = [<<EOF
 extraArgs:
-  - kubelet-insecure-tls: true
-  - kubelet-preferred-address-types: InternalIP
+  - --kubelet-insecure-tls=true
+  - --kubelet-preferred-address-types=InternalIP
 apiService:
   create: true
 EOF
