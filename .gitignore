@@ -1,8 +1,15 @@
+# ADDONS
+**.json
+**/.terraform**
+terraform.tfstate**
+**venv/
+**.vscode/
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-**/.terraform
 
 # C extensions
 *.so
