@@ -5,6 +5,7 @@ terraform.tfstate**
 **venv/
 **.vscode/
 .DS_Store
+**exported**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
