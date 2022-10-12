@@ -17,7 +17,7 @@ postgres_exists() {
 }
 
 if ! postgres_exists; then
-    psql -U "$PG_USER" -d postgres -c "CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'antidote';"
+    psql -U "$PG_USER" -d postgres -c "CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'password';"
 fi
 
 pushd "$migrate_db_folder" &> /dev/null || exit 1
