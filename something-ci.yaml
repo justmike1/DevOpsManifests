@@ -1,2 +1,5 @@
 on:
   workflow_call: null
+defaults:
+  run:
+    shell: bash

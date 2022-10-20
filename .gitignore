@@ -6,6 +6,7 @@ terraform.tfstate**
 **.vscode/
 .DS_Store
 **exported**
+!**/grafana-dashboards/*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
