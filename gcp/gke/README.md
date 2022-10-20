@@ -10,7 +10,7 @@ source ~/.zprofile | source ~/.profile
 
 * connect to the cluster 
 ```bash
-gcloud container clusters get-credentials ${var.cluster_name} --region us-central1 --project ${var.project_id}
+gcloud container clusters get-credentials ${var.cluster_name} --region ${var.region} --project ${var.project_id}
 ```
 
 * Installations needed
@@ -25,10 +25,24 @@ brew install --cask google-cloud-sdk
 
 ## On first setup
 >TODO: write CD script
+
+1. create environment folder with module (see dev environment for example)
+2. comment out code in [backend.tf](./environments/gke/dev/backend.tf)) and [bucket.tf](./modules/gke/bucket.tf) when applying for the first time
+3. when on the created folder
+```bash
+terraform init  # download modules & pull/create remote backend
+terraform apply # create cluster/machine
+```
+* on cleanup
+```bash
+terraform destroy
+```
+
 **secrets**
+* if not already made create a service account with admin cloudDNS permissions
 ```bash
 gcloud iam service-accounts keys create ./credentials.json \
-  --iam-account <DNS_SERVICE_ACCOUNT_EMAIL_WITH_PERMISSIONS>
+  --iam-account <SA_ID>@<PROJECT_ID>.gserviceaccount.com
 ```
 ```bash
 kubectl create secret generic "external-dns-sa" --namespace "default" \
@@ -37,6 +51,12 @@ kubectl create secret generic "external-dns-sa" --namespace "default" \
 **move the secret to the desired namespace**
 ```bash
 kubectl get secret "external-dns-sa" --namespace=default -o yaml | \
-  sed 's/namespace: .*/namespace: external-dns/' | \
+  sed 's/namespace: .*/namespace: cert-manager/' | \
     kubectl apply -f -
 ```
+
+# Helpers
+
+[Machine Types](./environments/README.md)
+
+[Links to docs/sources](./BIBLIOGRAPHY.md)

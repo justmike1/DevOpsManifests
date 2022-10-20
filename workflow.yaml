@@ -10,14 +10,17 @@ on:
   push:
     # branches:
     #   - main
+
 name: Run continuous integration
+
 concurrency: 
   group: 'ci-${{ github.ref }}'
+
 defaults:
   run:
     shell: bash
-jobs:
 
+jobs:
   affected-services:
     runs-on: ubuntu-22.04
     name: Fetch changed files
@@ -41,9 +44,7 @@ jobs:
             echo "$file was changed"
           if [[ "$file" == .github/workflows/*.yaml ]] ; then
             echo "Will run CI" && echo "::set-output name=changed_client::true"; fi
-          if [[ "$file" == bash_scripts/*.sh ]] || [[ "$file" == TradingSystemTests/** ]] ; then
-            echo "Will run CI" && echo "::set-output name=changed_client::true"; fi
-          if [[ "$file" == AlgoAPI/** ]] || [[ "$file" == cppBookie/** ]] || [[ "$file" == cppFutures/** ]]; then
+          if [[ "$file" == services/service-a/** ]] || [[ "$file" == services/service-b/** ]] || [[ "$file" == services/service-c/** ]]; then
             echo "Will run CI" && echo "::set-output name=changed_client::true"; fi
           if [[ "$file" == **.tf ]] || [[ "$file" == **.sh ]] || [[ "$file" == **.py ]]; then
             echo "Will run code checker" && echo "::set-output name=code_check::true"; fi
@@ -59,10 +60,3 @@ jobs:
     uses: ./.github/workflows/something-ci.yaml
     secrets: inherit
     
-    ### ON SOMETHING
-    
-    on:
-  workflow_call: null
-defaults:
-  run:
-    shell: bash
