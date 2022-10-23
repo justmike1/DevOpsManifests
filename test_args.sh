@@ -8,4 +8,7 @@
 namespace=
 test=
 
+# read args from cli 
+eval "$(read_args "$@")"
+
 echo $namespace $test
