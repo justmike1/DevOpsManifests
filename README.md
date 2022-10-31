@@ -6,13 +6,13 @@
 
 [Github Actions](./.github/workflows/): Demonstration of calling wanted service's CI or CD workflow depending on the file changed in the pushed commit.
 
-[aws](./aws/):
+[AWS](./aws/):
 
 * [EKS](./aws/eks/): Terraform manifests for deploying Kubernetes cluster on AWS.
 
 * [ELC](./aws/rds/): Terraform manifests for deploying EC2 instance with ELC on AWS.
 
-[gcp](./gcp/):
+[GCP](./gcp/):
 
 * [GKE](./gcp/gke/): Terraform manifests for deploying production ready(!!!) Kubernetes cluster on GCP.
 
