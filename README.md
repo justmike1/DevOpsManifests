@@ -4,7 +4,7 @@
 
 ## Projects
 
-[.github/workflows/](./.github/workflows/): Demonstration of calling wanted service's CI or CD workflow depending on the file changed in the pushed commit.
+[Github Actions](./.github/workflows/): Demonstration of calling wanted service's CI or CD workflow depending on the file changed in the pushed commit.
 
 [aws](./aws/):
 
