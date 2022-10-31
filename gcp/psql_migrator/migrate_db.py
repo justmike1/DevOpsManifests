@@ -53,7 +53,7 @@ class Migrate(Data):
                 try:
                     if self.__export__(database=database):
                         self.databases.remove(database)
-                        self.__import__(database=database)
+                        self.__import__(database=database) if self.im_instance else print("\nOnly did backup, --im_sql wasn't used")
                         print(f"databases left to migrate: {self.databases}")
                 except errors.HttpError as er:
                     if er.status_code == 409:

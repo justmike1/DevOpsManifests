@@ -21,7 +21,7 @@
 * --bucket: s3 bucket that stores the files | **(default: gs://import_export_db/python/)**
 * --ex_databases: which databases to export?
 * --ex_sql: export source google cloud sql id | **required**
-* --im_sql: import destination google cloud sql id | **required**
+* --im_sql: import destination google cloud sql id | **if not included the script will only export/backup to requested bucket**
 
 ```bash
 python migrate_db/migrate_db.py --ex_sql <SOURCE_DB> --im_sql <DEST_DB>

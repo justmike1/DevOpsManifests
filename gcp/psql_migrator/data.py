@@ -31,7 +31,7 @@ class Data:
         help="which project to check on?"
     )
     parser.add_argument("--ex_sql", type=str, help="google cloud sql id")
-    parser.add_argument("--im_sql", type=str, help="google cloud sql id", default="localhost")
+    parser.add_argument("--im_sql", type=str, help="google cloud sql id", default=False)
 
     args = parser.parse_args()
 
