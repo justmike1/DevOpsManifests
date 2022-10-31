@@ -1,0 +1,34 @@
+# Global values for helm, overriden in each services values.yaml.
+
+global:
+
+  imagePullSecrets: []
+
+  ingress:
+    annotations:
+      apiVersion: networking.k8s.io/v1
+      # cert-manager.io/cluster-issuer: cluster-issuer
+      # cert-manager.io/duration: "2160h"
+      # cert-manager.io/renew-before: "360h"
+      # external-dns.alpha.kubernetes.io/hostname: host.example.com
+      # kubernetes.io/ingress.allow-http: "false"
+      # traefik.ingress.kubernetes.io/router.tls: "true"
+      # kubernetes.io/ingress.class: traefik
+
+  tolerations: []
+
+  nodeSelector: {}
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: team
+            operator: In
+            values:
+            - engineers
+
+  data:
+    KEY: VALUE
+    # ...
