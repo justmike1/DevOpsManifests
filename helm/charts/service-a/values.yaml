@@ -12,19 +12,7 @@ image:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 80
-
-ingress:
-  enabled: true
-  hosts:
-    - host: host.example.com
-      paths:
-        - path: /api
-          pathType: Prefix
-  tls:
-   - secretName: service-a-chart-tls
-     hosts:
-       - host.example.com
+  targetPort: http
 
 resources: {}
   # limits:

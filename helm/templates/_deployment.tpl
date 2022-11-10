@@ -1,20 +1,20 @@
 {{/*
 Default Template for Deployment. All Sub-Charts under this Chart can include the below template.
 */}}
-{{- define "parent-app-chart.deploymenttemplate" }}
+{{- define "helm-test.deploymenttemplate" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "parent-app-chart.fullname" . }}
+  name: {{ include "helm-test.name" . }}
   labels:
-    {{- include "parent-app-chart.labels" . | nindent 4 }}
+    {{- include "helm-test.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "parent-app-chart.selectorLabels" . | nindent 6 }}
+      {{- include "helm-test.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -22,23 +22,23 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "parent-app-chart.selectorLabels" . | nindent 8 }}
+        {{- include "helm-test.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "parent-app-chart.serviceAccountName" . }}
+      serviceAccountName: {{ include "helm-test.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "gcr.io/adh-artifactory/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: {{ include "parent-app-chart.name" . }}
+            - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           # livenessProbe:
@@ -51,9 +51,11 @@ spec:
           #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.configMap.enabled }}
           envFrom:
             - configMapRef:
-                name: {{ .Chart.Name }}-configmap
+                name: {{ include "helm-test.name" . }}-configmap
+          {{- end }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

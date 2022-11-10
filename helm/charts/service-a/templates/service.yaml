@@ -1,1 +1,1 @@
-{{ include "parent-app-chart.servicetemplate" . }}
+{{ include "helm-test.servicetemplate" . }}

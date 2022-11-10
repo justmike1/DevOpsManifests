@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "parent-app-chart.name" -}}
+{{- define "helm-test.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "parent-app-chart.fullname" -}}
+{{- define "helm-test.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "parent-app-chart.chart" -}}
+{{- define "helm-test.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "parent-app-chart.labels" -}}
-helm.sh/chart: {{ include "parent-app-chart.chart" . }}
-{{ include "parent-app-chart.selectorLabels" . }}
+{{- define "helm-test.labels" -}}
+helm.sh/chart: {{ include "helm-test.chart" . }}
+{{ include "helm-test.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,18 +45,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "parent-app-chart.selectorLabels" -}}
-app: {{ include "parent-app-chart.name" . | trimSuffix "-be" | trimSuffix "-fe" }}
-app.kubernetes.io/name: {{ include "parent-app-chart.name" . }}
+{{- define "helm-test.selectorLabels" -}}
+app: {{ include "helm-test.name" . | trimSuffix "-be" | trimSuffix "-fe" }}
+app.kubernetes.io/name: {{ include "helm-test.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "parent-app-chart.serviceAccountName" -}}
+{{- define "helm-test.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "parent-app-chart..fullname" .) .Values.serviceAccount.name }}
+{{- default (include "helm-test.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

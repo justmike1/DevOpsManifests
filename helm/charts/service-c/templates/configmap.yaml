@@ -1,1 +1,1 @@
-{{ include "parent-app-chart.configmaptemplate" . }}
+{{ include "helm-test.configmaptemplate" . }}

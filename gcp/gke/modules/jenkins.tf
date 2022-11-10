@@ -1,35 +1,29 @@
 resource "kubernetes_namespace" "jenkins-ns" {
+  count = var.enable_jenkins
   metadata {
     name = "jenkins"
   }
 }
 
 resource "helm_release" "jenkins-chart" {
+  count            = var.enable_jenkins
   name             = "jenkins"
   chart            = "jenkins"
   version          = "4.2.8"
   repository       = "https://charts.jenkins.io"
-  namespace        = kubernetes_namespace.jenkins-ns.metadata.0.name
+  namespace        = kubernetes_namespace.jenkins-ns[*].metadata.0.name
   create_namespace = true
   values = [<<EOF
 controller:
   jenkinsUriPrefix: "/jenkins"
-  ingress: 
-    annotations:
-      apiVersion: networking.k8s.io/v1
-      cert-manager.io/cluster-issuer: "${local.cluster_issuer_name}"
-      cert-manager.io/duration: 2160h
-      cert-manager.io/renew-before: 360h
-      external-dns.alpha.kubernetes.io/hostname: "${local.full_dns}"
-      kubernetes.io/ingress.allow-http: "false"
-      kubernetes.io/ingress.class: traefik
-      traefik.ingress.kubernetes.io/router.tls: "true"
+  ingress:
     enabled: true
     path: /jenkins
-    tls:
-      - hosts: 
-          - ${local.full_dns}
-        secretName: jenkins-tls
+    ingressClassName: traefik
+    hostName: "${local.full_dns}" 
+    annotations:
+      apiVersion: networking.k8s.io/v1
+      external-dns.alpha.kubernetes.io/hostname: "${local.full_dns}"
   installPlugins:
     - kubernetes:latest
     - workflow-job:latest
@@ -40,7 +34,6 @@ controller:
     - google-source-plugin:latest
     - google-kubernetes-engine:latest
     - google-storage-plugin:latest
-<<<<<<< HEAD
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
@@ -101,7 +94,7 @@ affinity:
   depends_on = [
     module.gke,
     helm_release.ingress-controller,
-    helm_release.cm,
+
     helm_release.external-dns
   ]
 }

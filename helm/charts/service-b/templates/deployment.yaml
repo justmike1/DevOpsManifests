@@ -1,1 +1,1 @@
-{{ include "parent-app-chart.deploymenttemplate" . }}
+{{ include "helm-test.deploymenttemplate" . }}

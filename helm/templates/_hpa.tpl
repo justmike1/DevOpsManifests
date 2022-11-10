@@ -1,16 +1,16 @@
-{{- define "parent-app-chart.hpatemplate" }}
+{{- define "helm-test.hpatemplate" }}
 {{- if .Values.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "parent-app-chart.fullname" . }}
+  name: {{ include "helm-test.name" . }}
   labels:
-    {{- include "parent-app-chart.labels" . | nindent 4 }}
+    {{- include "helm-test.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "parent-app-chart.fullname" . }}
+    name: {{ include "helm-test.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

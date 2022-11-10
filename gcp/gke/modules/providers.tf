@@ -26,7 +26,7 @@ provider "helm" {
 # VERSIONS
 
 terraform {
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.3.0"
 
   required_providers {
     google = {
@@ -47,7 +47,7 @@ terraform {
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = ">= 1.14"
+      version = ">= 1.7.0"
     }
   }
 }

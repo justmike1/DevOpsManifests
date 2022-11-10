@@ -1,10 +1,10 @@
-{{- define "parent-app-chart.configmaptemplate" }}
+{{- define "helm-test.iconfigmaptemplate" }}
+{{- if .Values.configMap.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Chart.Name }}-configmap
-{{- with .Values.global.data }}
+  name: {{ include "helm-test.name" . }}-configmap
 data:
-  {{- toYaml . | nindent 2 }}
+  {{- toYaml .Values.configMap.data | nindent 2 }}
 {{- end }}
 {{- end }}
