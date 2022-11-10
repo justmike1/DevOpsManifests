@@ -14,18 +14,6 @@ service:
   port: 80
   targetPort: http
 
-ingress:
-  enabled: true
-  hosts:
-    - host: host.example.com
-      paths:
-        - path: /backend
-          pathType: Prefix
-  tls:
-   - secretName: service-b-chart-tls
-     hosts:
-       - host.example.com
-
 resources: {}
   # limits:
   #   cpu: 100m
