@@ -60,8 +60,9 @@ metadata:
   annotations:
     kubernetes.io/ingress.allow-http: "false"
     kubernetes.io/ingress.class: "gce"
-    networking.gke.io/managed-certificates: ${var.cluster_name}-managed-cert
+    networking.gke.io/managed-certificates: ${replace(local.full_dns, ".", "-")}-managed-cert
     kubernetes.io/ingress.global-static-ip-name: ${google_compute_global_address.cluster-cloud-armor-address.name}
+    external-dns.alpha.kubernetes.io/hostname: ${local.full_dns}
 spec:
   defaultBackend:
     service:
@@ -82,7 +83,7 @@ resource "kubectl_manifest" "catch-all-ingress-managed-cert" {
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: ${var.cluster_name}-managed-cert
+  name: ${replace(local.full_dns, ".", "-")}-managed-cert
   namespace: ${kubernetes_namespace.ingress-ns.metadata.0.name}
 spec:
   domains:

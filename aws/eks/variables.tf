@@ -62,23 +62,23 @@ variable "aws_region" {
 variable "name_prefix" {
   type        = string
   description = "Prefix to be used on each infrastructure object Name created in AWS."
-  default = "eks"
+  default     = "eks"
 }
 
 variable "admin_users" {
   type        = list(string)
   description = "List of Kubernetes admins"
-  default = ["mike"]
+  default     = ["mike"]
 }
 
 variable "developer_users" {
   type        = list(string)
   description = "List of Kubernetes developers"
-  default = ["api-user"]
+  default     = ["api-user"]
 }
 
 variable "domain_name" {
   type        = string
   description = "CI ingress domain name"
-  default = "domain.eks.com"
+  default     = "domain.eks.com"
 }

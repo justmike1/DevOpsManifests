@@ -1,3 +1,9 @@
+locals {
+  prod_acme           = "https://acme-v02.api.letsencrypt.org/directory"
+  staging_acme        = "https://acme-staging-v02.api.letsencrypt.org/directory"
+  cluster_issuer_name = "${var.cluster_name}-issuer"
+}
+
 resource "helm_release" "cm" {
   count            = var.enable_cert-manager
   name             = "cert-manager"

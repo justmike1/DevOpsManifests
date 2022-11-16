@@ -1,9 +1,9 @@
 locals {
-  cidrsubnet      = var.vpc_cidr
-  private_subnets = [cidrsubnet(local.cidrsubnet, 4, 1), cidrsubnet(local.cidrsubnet, 4, 2), cidrsubnet(local.cidrsubnet, 4, 3)]
-  public_subnets  = [cidrsubnet(local.cidrsubnet, 4, 4), cidrsubnet(local.cidrsubnet, 4, 5), cidrsubnet(local.cidrsubnet, 4, 6)]
+  cidrsubnet         = var.vpc_cidr
+  private_subnets    = [cidrsubnet(local.cidrsubnet, 4, 1), cidrsubnet(local.cidrsubnet, 4, 2), cidrsubnet(local.cidrsubnet, 4, 3)]
+  public_subnets     = [cidrsubnet(local.cidrsubnet, 4, 4), cidrsubnet(local.cidrsubnet, 4, 5), cidrsubnet(local.cidrsubnet, 4, 6)]
   single_nat_gateway = false
-  num_zones = 1
+  num_zones          = 1
 }
 
 module "vpc" {

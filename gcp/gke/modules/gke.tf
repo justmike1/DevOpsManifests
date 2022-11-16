@@ -4,7 +4,7 @@ module "gke" {
   name                       = var.cluster_name
   remove_default_node_pool   = true
   region                     = var.region
-  zones                      = ["${var.region}-a", "${var.region}-b", "${var.region}-f"]
+  zones                      = ["${var.region}-c", "${var.region}-b", var.region == "us-east1" ? "${var.region}-d" : "${var.region}-f"]
   network                    = module.vpc.network_name
   subnetwork                 = "private-subnet"
   ip_range_pods              = "k8s-pod-range"

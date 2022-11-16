@@ -24,20 +24,13 @@ data "google_secret_manager_secret_version" "slack_webhook" {
   version = "1"
 }
 
-resource "kubernetes_namespace" "monitoring-ns" {
-  count = var.enable_monitoring
-  metadata {
-    name = "monitoring"
-  }
-}
-
 resource "helm_release" "monitoring-stack" {
   count            = var.enable_monitoring
   chart            = "kube-prometheus-stack"
   cleanup_on_fail  = true
   create_namespace = true
   name             = "kube-prometheus-stack"
-  namespace        = kubernetes_namespace.monitoring-ns[*].metadata.0.name
+  namespace        = "monitoring"
   repository       = "https://prometheus-community.github.io/helm-charts"
   version          = "41.7.3"
   values = [<<EOF
@@ -111,10 +104,11 @@ grafana:
       serve_from_sub_path: true
   ingress:  
     enabled: true
-    ingressClassName: traefik
     hosts: ["${local.full_dns}"]
     annotations:
       apiVersion: networking.k8s.io/v1
+      kubernetes.io/ingress.allow-http: "false"
+      kubernetes.io/ingress.class: "traefik"
       external-dns.alpha.kubernetes.io/hostname: "${local.full_dns}"
     path: /grafana
 affinity:
@@ -162,7 +156,6 @@ affinity:
   depends_on = [
     module.gke,
     helm_release.ingress-controller,
-
     helm_release.external-dns
   ]
 }

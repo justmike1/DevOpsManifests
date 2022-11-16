@@ -56,12 +56,12 @@ affinity:
   }
   set {
     name  = "serviceAccount.name"
-    value = "109913070855-compute"
+    value = split("@", var.clouddns_sa_email)[0]
   }
 
   depends_on = [
     module.gke,
     helm_release.ingress-controller,
-
+    kubernetes_secret.external-dns-sa
   ]
 }

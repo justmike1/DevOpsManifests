@@ -6,14 +6,46 @@ locals {
     allocated_ip_range  = null
     authorized_networks = []
   }
+  sql_replicas = [
+    {
+      name                  = "0"
+      zone                  = "${var.region}-c"
+      availability_type     = "REGIONAL"
+      tier                  = var.sql_tier
+      ip_configuration      = local.read_replica_ip_configuration
+      database_flags        = [{ name = "autovacuum", value = "off" }]
+      disk_autoresize       = null
+      disk_autoresize_limit = null
+      disk_size             = null
+      disk_type             = "PD_HDD"
+      user_labels           = { replica = "0" }
+      encryption_key_name   = null
+    },
+    {
+      name                  = "1"
+      zone                  = "${var.region}-b"
+      availability_type     = "REGIONAL"
+      tier                  = var.sql_tier
+      ip_configuration      = local.read_replica_ip_configuration
+      database_flags        = [{ name = "autovacuum", value = "off" }]
+      disk_autoresize       = null
+      disk_autoresize_limit = null
+      disk_size             = null
+      disk_type             = "PD_HDD"
+      user_labels           = { replica = "1" }
+      encryption_key_name   = null
+    },
+  ]
 }
 
 module "sql-db" {
-  source            = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
-  name              = "${var.cluster_name}-sql"
-  project_id        = var.project_id
-  database_version  = "POSTGRES_14"
-  enable_default_db = false
+  count               = var.environment == "prod" ? 0 : 1
+  source              = "GoogleCloudPlatform/sql-db/google//modules/postgresql"
+  name                = "${var.cluster_name}-sql"
+  project_id          = var.project_id
+  database_version    = "POSTGRES_14"
+  enable_default_db   = false
+  deletion_protection = false
 
   // Master configurations
   tier                            = var.sql_tier
@@ -21,12 +53,10 @@ module "sql-db" {
   disk_size                       = var.sql_disk_size
   disk_type                       = "PD_SSD"
   zone                            = "${var.region}-c"
-  availability_type               = "REGIONAL"
+  availability_type               = var.sql_high_available ? "REGIONAL" : null
   maintenance_window_day          = 7
   maintenance_window_hour         = 12
   maintenance_window_update_track = "stable"
-
-  deletion_protection = false
 
   database_flags = [{ name = "autovacuum", value = "off" }]
 
@@ -54,36 +84,8 @@ module "sql-db" {
 
   // Read replica configurations
   read_replica_name_suffix = "-read-"
-  read_replicas = [
-    {
-      name                  = "0"
-      zone                  = "${var.region}-a"
-      availability_type     = "REGIONAL"
-      tier                  = var.sql_tier
-      ip_configuration      = local.read_replica_ip_configuration
-      database_flags        = [{ name = "autovacuum", value = "off" }]
-      disk_autoresize       = null
-      disk_autoresize_limit = null
-      disk_size             = null
-      disk_type             = "PD_HDD"
-      user_labels           = { replica = "0" }
-      encryption_key_name   = null
-    },
-    {
-      name                  = "1"
-      zone                  = "${var.region}-b"
-      availability_type     = "REGIONAL"
-      tier                  = var.sql_tier
-      ip_configuration      = local.read_replica_ip_configuration
-      database_flags        = [{ name = "autovacuum", value = "off" }]
-      disk_autoresize       = null
-      disk_autoresize_limit = null
-      disk_size             = null
-      disk_type             = "PD_HDD"
-      user_labels           = { replica = "1" }
-      encryption_key_name   = null
-    },
-  ]
+  read_replicas            = var.sql_high_available ? local.sql_replicas : []
+
 
   additional_databases = [for db in var.sql_databases : {
     name      = db

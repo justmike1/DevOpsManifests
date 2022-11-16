@@ -1,17 +1,10 @@
-resource "kubernetes_namespace" "jenkins-ns" {
-  count = var.enable_jenkins
-  metadata {
-    name = "jenkins"
-  }
-}
-
 resource "helm_release" "jenkins-chart" {
   count            = var.enable_jenkins
   name             = "jenkins"
   chart            = "jenkins"
   version          = "4.2.8"
   repository       = "https://charts.jenkins.io"
-  namespace        = kubernetes_namespace.jenkins-ns[*].metadata.0.name
+  namespace        = "jenkins"
   create_namespace = true
   values = [<<EOF
 controller:
@@ -19,10 +12,11 @@ controller:
   ingress:
     enabled: true
     path: /jenkins
-    ingressClassName: traefik
     hostName: "${local.full_dns}" 
     annotations:
       apiVersion: networking.k8s.io/v1
+      kubernetes.io/ingress.allow-http: "false"
+      kubernetes.io/ingress.class: "traefik"
       external-dns.alpha.kubernetes.io/hostname: "${local.full_dns}"
   installPlugins:
     - kubernetes:latest
@@ -94,7 +88,6 @@ affinity:
   depends_on = [
     module.gke,
     helm_release.ingress-controller,
-
     helm_release.external-dns
   ]
 }

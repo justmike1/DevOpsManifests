@@ -1,6 +1,6 @@
 locals {
   enabled_cluster_logs = ["api", "audit", "controllerManager", "scheduler", "authenticator"]
-  partition       = data.aws_partition.current.partition
+  partition            = data.aws_partition.current.partition
 }
 
 resource "aws_ebs_encryption_by_default" "ebs_encryption" {
@@ -32,8 +32,8 @@ module "eks" {
   ]
 
   tags = {
-    Environment = "ci"
-    Terraform   = "True"
+    Environment              = "ci"
+    Terraform                = "True"
     "karpenter.sh/discovery" = var.cluster_name
   }
 
@@ -55,7 +55,7 @@ module "eks" {
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
     }
-     # Control plane invoke Karpenter webhook
+    # Control plane invoke Karpenter webhook
     ingress_karpenter_webhook_tcp = {
       description                   = "Control plane invoke Karpenter webhook"
       protocol                      = "tcp"
@@ -65,7 +65,7 @@ module "eks" {
       source_cluster_security_group = true
     }
   }
-  
+
   eks_managed_node_groups = {
     worker-ci = {
       instance_types = ["t3.large"]
@@ -81,7 +81,7 @@ module "eks" {
       ]
 
       tags = {
-        instance-type  = "on-demand-large"
+        instance-type = "on-demand-large"
       }
     }
   }
