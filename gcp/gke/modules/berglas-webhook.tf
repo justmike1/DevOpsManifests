@@ -1,10 +1,7 @@
 # https://github.com/GoogleCloudPlatform/berglas/tree/main/examples/kubernetes
-locals {
-  berglas_webhook_cloudrun_url = google_cloud_run_service.berglas-webhook-cloudrun.status[0].url
-}
 
 resource "null_resource" "create_container_for_cloudrun" {
-  count = var.berglas_secret_keys != [] ? 1 : 0
+  count = var.berglas_secret_keys != [] ? 0 : 1
   provisioner "local-exec" {
     command = <<EOT
 docker pull ${var.berglas_image}
@@ -15,6 +12,7 @@ docker push gcr.io/${var.project_id}/berglas_webhook:latest
 }
 
 resource "google_cloud_run_service" "berglas-webhook-cloudrun" {
+    count     = var.berglas_secret_keys != [] ? 0 : 1
   name     = "${var.cluster_name}-berglas-webhook"
   location = var.region
 
@@ -46,9 +44,10 @@ data "google_iam_policy" "noauth" {
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = google_cloud_run_service.berglas-webhook-cloudrun.location
-  project  = google_cloud_run_service.berglas-webhook-cloudrun.project
-  service  = google_cloud_run_service.berglas-webhook-cloudrun.name
+      count     = var.berglas_secret_keys != [] ? 0 : 1
+  location = google_cloud_run_service.berglas-webhook-cloudrun[count.index].location
+  project  = google_cloud_run_service.berglas-webhook-cloudrun[count.index].project
+  service  = google_cloud_run_service.berglas-webhook-cloudrun[count.index].name
 
   policy_data = data.google_iam_policy.noauth.policy_data
 
@@ -58,6 +57,8 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 }
 
 resource "google_service_account" "berglas_accessor_sa" {
+      count     = var.berglas_secret_keys != [] ? 0 : 1
+
   project      = var.project_id
   account_id   = "berglas-accessor"
   display_name = "Berglas secret accessor account"
@@ -70,7 +71,7 @@ resource "google_service_account" "berglas_accessor_sa" {
 resource "null_resource" "berglas_grant_secrets" {
   for_each = toset(var.berglas_secret_keys)
   provisioner "local-exec" {
-    command = "berglas grant sm://${var.project_id}/${each.key} --member serviceAccount:${google_service_account.berglas_accessor_sa.email}"
+    command = "berglas grant sm://${var.project_id}/${each.key} --member serviceAccount:${google_service_account.berglas_accessor_sa[0].email}"
   }
 
   depends_on = [
@@ -79,7 +80,7 @@ resource "null_resource" "berglas_grant_secrets" {
 }
 
 resource "kubectl_manifest" "berglas-serviceaccount" {
-  count     = var.berglas_secret_keys != [] ? 1 : 0
+  count     = var.berglas_secret_keys != [] ? 0 : 1
   yaml_body = <<YAML
 apiVersion: v1
 kind: ServiceAccount
@@ -97,7 +98,9 @@ YAML
 }
 
 resource "google_service_account_iam_binding" "berglas-serviceaccount-binding" {
-  service_account_id = google_service_account.berglas_accessor_sa.name
+      count     = var.berglas_secret_keys != [] ? 0 : 1
+
+  service_account_id = google_service_account.berglas_accessor_sa[count.index].name
   role               = "roles/iam.workloadIdentityUser"
 
   members = [
@@ -110,7 +113,7 @@ resource "google_service_account_iam_binding" "berglas-serviceaccount-binding" {
 }
 
 resource "kubectl_manifest" "berglas-webhook" {
-  count     = var.berglas_secret_keys != [] ? 1 : 0
+  count     = var.berglas_secret_keys != [] ? 0 : 1
   yaml_body = <<YAML
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
@@ -125,7 +128,7 @@ webhooks:
   admissionReviewVersions: ["v1", "v1beta1"]
   sideEffects: NoneOnDryRun
   clientConfig:
-    url: ${local.berglas_webhook_cloudrun_url}
+    url: ${google_cloud_run_service.berglas-webhook-cloudrun[count.index].status[0].url}
     caBundle: ""
   rules:
   - operations: ["CREATE"]
