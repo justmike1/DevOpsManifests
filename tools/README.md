@@ -21,5 +21,5 @@ export PROJECT_ID=mike-development
 ```
 ```py
 from tavisod.get_secrets import getSecret
-getSecret("DB_PASSWORD")
+getSecret().fromGsm("DB_PASSWORD")
 ```
