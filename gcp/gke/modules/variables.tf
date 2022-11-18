@@ -115,6 +115,12 @@ variable "berglas_secret_keys" {
   default     = []
 }
 
+variable "google_secret_manager_keys" {
+  type        = list(any)
+  description = "all secret keys that present in secret manager for the application to fetch"
+  default     = []
+}
+
 variable "sql_disk_size" {
   type        = number
   description = "sql instance's disk size"

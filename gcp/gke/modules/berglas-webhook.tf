@@ -12,7 +12,7 @@ docker push gcr.io/${var.project_id}/berglas_webhook:latest
 }
 
 resource "google_cloud_run_service" "berglas-webhook-cloudrun" {
-    count     = var.berglas_secret_keys != [] ? 0 : 1
+  count    = var.berglas_secret_keys != [] ? 0 : 1
   name     = "${var.cluster_name}-berglas-webhook"
   location = var.region
 
@@ -44,7 +44,7 @@ data "google_iam_policy" "noauth" {
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
-      count     = var.berglas_secret_keys != [] ? 0 : 1
+  count    = var.berglas_secret_keys != [] ? 0 : 1
   location = google_cloud_run_service.berglas-webhook-cloudrun[count.index].location
   project  = google_cloud_run_service.berglas-webhook-cloudrun[count.index].project
   service  = google_cloud_run_service.berglas-webhook-cloudrun[count.index].name
@@ -57,7 +57,7 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 }
 
 resource "google_service_account" "berglas_accessor_sa" {
-      count     = var.berglas_secret_keys != [] ? 0 : 1
+  count = var.berglas_secret_keys != [] ? 0 : 1
 
   project      = var.project_id
   account_id   = "berglas-accessor"
@@ -88,7 +88,7 @@ metadata:
   name: berglas-serviceaccount
   namespace: ${var.environment}
   annotations:
-    iam.gke.io/gcp-service-account: berglas-accessor@${var.project_id}.iam.gserviceaccount.com
+    iam.gke.io/gcp-service-account: ${google_service_account.berglas_accessor_sa[count.index].email}
 YAML
 
   depends_on = [
@@ -98,7 +98,7 @@ YAML
 }
 
 resource "google_service_account_iam_binding" "berglas-serviceaccount-binding" {
-      count     = var.berglas_secret_keys != [] ? 0 : 1
+  count = var.berglas_secret_keys != [] ? 0 : 1
 
   service_account_id = google_service_account.berglas_accessor_sa[count.index].name
   role               = "roles/iam.workloadIdentityUser"

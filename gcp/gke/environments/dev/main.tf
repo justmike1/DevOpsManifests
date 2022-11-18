@@ -13,8 +13,11 @@ module "gke-cluster" {
   artifactory_sa_email = "artifacts-sa-rw@art-project.iam.gserviceaccount.com"
   clouddns_sa_email    = "project-num-compute@developer.gserviceaccount.com"
 
-  # berglas secret keys (must be already present in secret manager)
+  # google secret manager settings (must be already present in secret manager)
+  # if you want to use berglas set:
   berglas_secret_keys = ["POSTGRES_USER", "POSTGRES_PASSWORD"]
+  # if you want to use secret manager with 'tavisod' python package set:
+  google_secret_manager_keys = ["POSTGRES_USER", "POSTGRES_PASSWORD"]
 
   # pubsub & scheduler settings
   pubsub_topics = ["somepubsub", "somepubsub2"]
