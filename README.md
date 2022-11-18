@@ -26,7 +26,11 @@
 
 * [test_args](./scripts/test_args.sh): Test args function imported from utils
 
-* [slack_alert](./scripts/slack_alert.py): To use on CI/CD to be alerted on certain statuses in slack
+[tools](./tools/):
+
+* [slack_alert](./tools/slack_alert/): To use on CI/CD to be alerted on certain statuses in slack
+
+* [tavisod](./tools/tavisod/): Python package to simplify fetching a secret from google's secret manager
 
 ## My other Projects
 
