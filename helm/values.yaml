@@ -1,8 +1,9 @@
 # Global values for helm, overriden in each services values.yaml.
-
-# Global values for helm, overriden in each services values.yaml.
-
 global:
+
+  projectId: mike-development
+
+  serviceAccountName: secret-manager-readonly
 
   imagePullSecrets:
     - name: "gcr-json-key"
@@ -41,4 +42,3 @@ global:
   data:
     KEY: VALUE
     # ...
-

@@ -2,6 +2,7 @@
 Default Template for Deployment. All Sub-Charts under this Chart can include the below template.
 */}}
 {{- define "helm-test.deploymenttemplate" }}
+{{- $PROJECT_ID := .Values.global.projectId -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,7 +36,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "gcr.io/adh-artifactory/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -51,10 +52,13 @@ spec:
           #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: PROJECT_ID
+              value: {{ $PROJECT_ID }}
           {{- if .Values.configMap.enabled }}
           envFrom:
             - configMapRef:
-                name: {{ include "helm-test.name" . }}-configmap
+                name: {{ include "helm-adh.name" . }}-configmap
           {{- end }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:

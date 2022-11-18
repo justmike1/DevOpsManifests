@@ -38,6 +38,15 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# insert here envrionment variables
+configMap:
+  enabled: true
+  data:
+    REDIS_HOST: "redis"
+    REDIS_PASSWORD: "password"
+    POSTGRES_HOST: "postgres"
+    POSTGRES_PASSWORD: "password"
+
 podAnnotations: {}
 
 podSecurityContext: {}
