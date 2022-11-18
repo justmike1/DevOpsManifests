@@ -1,13 +1,16 @@
-# Import the Secret Manager client library.
 from google.cloud import secretmanager
+from dataclasses import dataclass
 import os
 
-# TODO: add manyy functions for every provider and one line all fetches
+@dataclass(init=True, frozen=True)
 class getSecret(object):
-    def __init__(self, secret_id) -> str:
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    def fromGsm(self, secret_id) -> str:
         if os.getenv(secret_id):
-            return os.getenv(secret_id) 
-        client = secretmanager.SecretManagerServiceClient()
-        name = f"projects/{os.getenv('PROJECT_ID')}/secrets/{secret_id}/versions/latest"
-        response = client.access_secret_version(name=name)
+            return os.getenv(secret_id)
+        name: str = f"projects/{os.getenv('PROJECT_ID')}/secrets/{secret_id}/versions/latest"
+        # Access the secret version.
+        response = self.client.access_secret_version(name=name)
         return response
