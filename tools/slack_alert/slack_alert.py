@@ -20,7 +20,6 @@ class AlertData:
     developers: str = os.getenv("DEVELOPERS")
 
     def post_alert(self) -> str:
-        # should be like {"mikejoseph-ah": "U021H4WSYTZ"} in DEVELOPERS secret
         parsed_devs: dict = {dev:id for dev,id in dict(json.loads(self.developers)).items()}
         headers = {
             "Content-type": "application/json",
