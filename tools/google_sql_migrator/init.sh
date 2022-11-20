@@ -2,7 +2,7 @@
 
 set -e
 
-migrate_db_folder="${BASH_SOURCE[0]%/*}/"
+google_sql_migrator_folder="${BASH_SOURCE[0]%/*}/"
 PG_USER=$(id -un)
 
 # source venv
@@ -20,6 +20,6 @@ if ! postgres_exists; then
     psql -U "$PG_USER" -d postgres -c "CREATE ROLE postgres WITH LOGIN SUPERUSER PASSWORD 'password';"
 fi
 
-pushd "$migrate_db_folder" &> /dev/null || exit 1
-python migrate_db.py --ex_sql develop --im_sql localhost --ex_databases "$@"
+pushd "$google_sql_migrator_folder" &> /dev/null || exit 1
+python migrate.py --ex_sql develop --im_sql localhost --ex_databases "$@"
 popd &> /dev/null || exit 1

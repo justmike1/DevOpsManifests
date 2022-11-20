@@ -16,8 +16,6 @@
 
 * [GKE](./gcp/gke/): Terraform manifests for deploying production ready(!!!) Kubernetes cluster on GCP.
 
-* [Cloud SQL Migrator](./gcp/psql_migrator/): Tool to migrate data between Google Cloud SQL instances.
-
 [helm](./helm/): Demonstration of microservices structure with parent helm chart and subchart per microservice.
 
 [scripts](./scripts/):
@@ -31,6 +29,8 @@
 * [slack_alert](./tools/slack_alert/): To use on CI/CD to be alerted on certain statuses in slack
 
 * [tavisod](./tools/tavisod/): Python package to simplify fetching a secret from google's secret manager
+
+* [google_sql_migrator](./tools/google_sql_migrator/): Tool to migrate data between Google Cloud SQL instances.
 
 ## My other Projects
 

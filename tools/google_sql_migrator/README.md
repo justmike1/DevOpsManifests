@@ -2,6 +2,8 @@
 
 ## Instructions
 
+**IMPORTANT connect to gcloud sdk `gcloud auth application-default login`**
+
 * Setup python
     ```bash
     brew install python@3.8
@@ -10,7 +12,7 @@
     ```
 * Install requirements
     ```bash
-    pip install -r tools/migrate_db/requirements.txt
+    pip install -r tools/google_sql_migrator/requirements.txt
     ```
 
 ### Running the migrator
@@ -19,12 +21,12 @@
 * --ex_project: source google cloud project
 * --im_project: destination google cloud project
 * --bucket: s3 bucket that stores the files | **(default: gs://import_export_db/python/)**
-* --ex_databases: which databases to export?
+* --ex_databases: which databases to export? | **(default: all)**
 * --ex_sql: export source google cloud sql id | **required**
 * --im_sql: import destination google cloud sql id | **if not included the script will only export/backup to requested bucket**
 
 ```bash
-python migrate_db/migrate_db.py --ex_sql <SOURCE_DB> --im_sql <DEST_DB>
+python google_sql_migrator/migrate.py --ex_sql <SOURCE_DB> --im_sql <DEST_DB>
 ```
 
 ### Running the localhost migrator
@@ -35,10 +37,10 @@ brew install postgresql@14 # or 13
 ```
 * run the migrator with the desired database to migrate
 ```bash
-./tools/migrate_db/init.sh <DB_1> <DB_2>
+./tools/google_sql_migrator/init.sh <DB_1> <DB_2>
 
 # I.E:
-./tools/migrate_db/init.sh emr
+./tools/google_sql_migrator/init.sh emr
 ```
 
 ### Test
@@ -52,7 +54,7 @@ psql postgres://postgres:<SQL_PASS>@localhost:5432/
 
 * if migrated to localhost then
 ```bash
-psql postgres://postgres:password@localhost:5432/
+psql postgres://postgres:antidote@localhost:5432/
 \list
 ```
 
@@ -61,7 +63,13 @@ psql postgres://postgres:password@localhost:5432/
 * GOOGLE_APPLICATION_CREDENTIALS 
 
 ```bash
-    docker run -e GOOGLE_APPLICATION_CREDENTIALS=/adc.json \
-    -v ~/.config/gcloud/legacy_credentials/<EMAIL>/adc.json:/adc.json sql_migrator \
-    --ex_sql=source --im_sql=target
+docker run -e GOOGLE_APPLICATION_CREDENTIALS=/adc.json \
+    -v ~/.config/gcloud/legacy_credentials/<EMAIL>/adc.json:/adc.json \
+    google_sql_migrator --ex_sql=<SOURCE> --im_sql=<TARGET>
 ```
+
+### if one of the SQL instances is new, need to add service account permissions
+
+* take the service account of the SQL instance from GCP --> SQL 
+
+```gsutil iam ch serviceAccount:<user email>:objectCreator,roles/storage.objectViewer gs://import_export_db```
