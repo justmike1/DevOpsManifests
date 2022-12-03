@@ -59,7 +59,7 @@ EOF
     value = 32080
   }
   set {
-    name  = "ports.web.nodePort"
+    name  = "ports.websecure.nodePort"
     value = 32443
   }
   set {
