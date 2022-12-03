@@ -34,7 +34,9 @@
 
 ## My other Projects
 
-[MarketWatcher](https://github.com/justmike1/MarketWatcher) (*My favorite*)
+[BookishSWAdventure](https://github.com/justmike1/bookish-sw-adventure) (*My favorite*)
+
+[MarketWatcher](https://github.com/justmike1/MarketWatcher)
 
 [resolve-and-ping](https://github.com/justmike1/resolve-and-ping)
 
