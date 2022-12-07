@@ -17,15 +17,16 @@ class AlertData:
     image: str = os.getenv("IMAGE")
     tag: str = os.getenv("TAG")
     webhook: str = os.getenv("SLACK_WEBHOOK")
+    result: str = "with failure" if "failure" in os.getenv("RESULT") else "successfully"
     developers: str = os.getenv("DEVELOPERS")
 
-    def post_alert(self) -> str:
+    def post_alert(self) -> rq.Response:
         parsed_devs: dict = {dev:id for dev,id in dict(json.loads(self.developers)).items()}
         headers = {
             "Content-type": "application/json",
         }
         json_data = {
-            "text": f"Build & Push finished successfully for {self.image}:{self.tag}, Event: {self.event}, Author: <@{parsed_devs[self.author]}>",
+            "text": f"Build & Push finished {self.result} for {self.image}:{self.tag}, Event: {self.event}, Author: <@{parsed_devs[self.author]}>",
         }
         res = rq.post(
             url=f"https://hooks.slack.com/services/{self.webhook}",

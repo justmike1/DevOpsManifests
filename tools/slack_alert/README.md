@@ -16,6 +16,7 @@ env:
     AUTHOR: ${{ github.actor }}
     EVENT: ${{ github.event_name }}
     IMAGE: ${{ github.ref_name }}
+    RESULT: (${{ needs.some-build-action.result }})
     SLACK_WEBHOOK: '${{ secrets.SLACK_WEBHOOK }}' 
     DEVELOPERS: '${{ secrets.DEVELOPERS }}'
 steps:
