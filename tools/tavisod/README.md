@@ -6,13 +6,15 @@ pip install tavisod
 
 # Usage
 
-```bash
-export PROJECT_ID=mike-development
-```
-```py
-from tavisod.get_secrets import getSecret
-getSecret().fromGsm("DB_PASSWORD")
-```
+* [See test file for example usage](../../tests/test_tavisod.py)
+>replace project_id to your relevant one
+
+| argument  | required |
+|---|---|
+| project_id | yes |
+| secret_id | yes |
+| version | no (default=latest) |
+| check_env | no (default=False) |
 
 ## Build project
 

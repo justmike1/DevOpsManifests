@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='tavisod',
     packages=["tavisod"],
-    version='1.0.4',
+    version='1.0.5',
     author='Mike',
     author_email='mikej@antidotehealth.com',
     description='google cloud secret manager fetcher for micro services',
