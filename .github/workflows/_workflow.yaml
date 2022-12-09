@@ -1,15 +1,16 @@
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
-    branches-ignore:
-      - cosmetics/**
+#   pull_request:
+#     types:
+#       - opened
+#       - reopened
+#       - synchronize
+#       - ready_for_review
+#     branches-ignore:
+#       - cosmetics/**
   push:
     branches:
-      - main
+      - never
+#       - main
 
 name: Run continuous integration
 
