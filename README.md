@@ -20,7 +20,11 @@
 
 [scripts](./scripts/):
 
--   [bash_utils](./scripts/bash_utils.sh): Utils bash file to store functions to be imported in needed files
+-   [utils](./scripts/bash_utils.sh): Utils bash file to store functions to be imported in needed files
+
+-   [formatter](./scripts/format_all.sh): Format the repository's code according to my standard
+
+-   [linter](./scripts/format_all.sh): Lint the repository's code to reduce bad code
 
 -   [test_args](./scripts/test_args.sh): Test args function imported from utils
 
