@@ -58,7 +58,7 @@ spec:
           {{- if .Values.configMap.enabled }}
           envFrom:
             - configMapRef:
-                name: {{ include "helm-adh.name" . }}-configmap
+                name: {{ include "helm-test.name" . }}-configmap
           {{- end }}
       {{- with .Values.global.nodeSelector }}
       nodeSelector:

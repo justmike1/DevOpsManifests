@@ -54,7 +54,7 @@ psql postgres://postgres:<SQL_PASS>@localhost:5432/
 
 * if migrated to localhost then
 ```bash
-psql postgres://postgres:antidote@localhost:5432/
+psql postgres://postgres:password@localhost:5432/
 \list
 ```
 

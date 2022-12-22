@@ -44,9 +44,9 @@ grafana:
         access: proxy
         jsonData:
           tokenUri: https://oauth2.googleapis.com/token
-          clientEmail: monitoring-instances-grafana@med-and-beyond.iam.gserviceaccount.com
+          clientEmail: ${var.grafana_oauth_sa}
           authenticationType: jwt
-          defaultProject: med-and-beyond
+          defaultProject: ${var.project_id}
         secureJsonData:
           privateKey: "${data.google_secret_manager_secret_version.gcm_sa.secret_data}"
   dashboardProviders:

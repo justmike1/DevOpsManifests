@@ -5,7 +5,7 @@ locals {
 }
 
 resource "helm_release" "cm" {
-  count            = var.enable_cert-manager
+  count            = var.enable_github_runner == 1 || var.enable_cert_manager == 1 ? 1 : 0
   name             = "cert-manager"
   namespace        = kubernetes_namespace.ingress-ns.metadata.0.name
   create_namespace = true
@@ -53,7 +53,7 @@ affinity:
 
 # server: ${var.environment != "prod" || var.environment != "production" ? local.staging_acme : local.prod_acme}
 resource "kubectl_manifest" "cas-cluster-issuer-staging" {
-  count     = var.enable_cert-manager
+  count     = var.enable_cert_manager
   yaml_body = <<YAML
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -81,7 +81,7 @@ YAML
   ]
 }
 resource "kubectl_manifest" "cas-cluster-issuer-prod" {
-  count     = var.enable_cert-manager
+  count     = var.enable_cert_manager
   yaml_body = <<YAML
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer

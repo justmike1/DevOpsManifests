@@ -33,12 +33,6 @@ variable "cluster_name" {
   description = "cluster's name"
 }
 
-variable "berglas_image" {
-  type        = string
-  description = "berglas docker image to use for cloud run"
-  default     = "mikeengineering/bergals-webhook:1.0.1"
-}
-
 variable "dns_project" {
   type        = string
   description = "cloudDNS project"
@@ -55,13 +49,25 @@ variable "enable_monitoring" {
   default     = 0
 }
 
+variable "sql_require_ssl" {
+  type        = bool
+  description = "whether the google sql instance requires ssl for connections"
+  default     = false
+}
+
+variable "enable_github_runner" {
+  type        = number
+  description = "if to enable github runner"
+  default     = 0
+}
+
 variable "enable_jenkins" {
   type        = number
   description = "deploy jenkins stack"
   default     = 0
 }
 
-variable "enable_cert-manager" {
+variable "enable_cert_manager" {
   type        = number
   description = "deploy cert-manager with let's encrypt clusterissuers"
   default     = 0
@@ -109,15 +115,15 @@ variable "scheduler_jobs" {
   default     = {}
 }
 
-variable "berglas_secret_keys" {
-  type        = list(any)
-  description = "all secret keys that present in secret manager to let berglas to listen to"
-  default     = []
-}
-
 variable "google_secret_manager_keys" {
   type        = list(any)
   description = "all secret keys that present in secret manager for the application to fetch"
+  default     = []
+}
+
+variable "old_service_accounts" {
+  type        = list(any)
+  description = "all service accounts that was already made for microservices"
   default     = []
 }
 
@@ -125,6 +131,11 @@ variable "sql_disk_size" {
   type        = number
   description = "sql instance's disk size"
   default     = 100
+}
+
+variable "grafana_oauth_sa" {
+  type        = string
+  description = "service account for grafana google sso"
 }
 
 variable "sql_high_available" {

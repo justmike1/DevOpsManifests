@@ -18,10 +18,11 @@ resource "google_compute_router_nat" "nat" {
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address
 resource "google_compute_address" "nat" {
   name         = "nat"
+  region       = var.region
   address_type = "EXTERNAL"
   network_tier = "PREMIUM"
 
-  depends_on = [google_project_service.compute]
+  depends_on = [google_project_service.project_services]
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router
