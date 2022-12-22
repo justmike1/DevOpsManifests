@@ -9,8 +9,8 @@ resource "google_cloud_scheduler_job" "scheduler-jobs" {
   description      = "${var.sub_domain} ${each.key} scheduler job"
   project          = var.project_id
   region           = var.region
-  schedule         = var.scheduler_jobs[each.key][0]
-  time_zone        = var.scheduler_jobs[each.key][1]
+  schedule         = var.scheduler_jobs[each.key][1]
+  time_zone        = var.scheduler_jobs[each.key][2]
   attempt_deadline = "180s"
 
   retry_config {
@@ -21,11 +21,8 @@ resource "google_cloud_scheduler_job" "scheduler-jobs" {
   }
 
   http_target {
-    http_method = "GET"
-    headers = {
-      User-Agent = "Google-Cloud-Scheduler"
-    }
-    uri = "https://${local.full_dns}/v1/${each.key}/"
+    http_method = var.scheduler_jobs[each.key][0]
+    uri         = "https://${local.full_dns}/v1/${each.key}/"
     oidc_token {
       service_account_email = google_service_account.scheduler-sa.email
     }

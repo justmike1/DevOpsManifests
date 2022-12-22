@@ -9,8 +9,7 @@ module "vpc" {
   delete_default_internet_gateway_routes = false
 
   depends_on = [
-    google_project_service.compute,
-    google_project_service.container
+    google_project_service.project_services
   ]
 
   subnets = [

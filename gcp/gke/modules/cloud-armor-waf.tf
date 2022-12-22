@@ -31,6 +31,9 @@ metadata:
   name: backendconfig-${google_compute_security_policy.cluster-sec-policy.name}
   namespace: ${kubernetes_namespace.ingress-ns.metadata.0.name}
 spec:
+  timeoutSec: 86400
+  connectionDraining:
+    drainingTimeoutSec: 1800
   securityPolicy:
     name: "${google_compute_security_policy.cluster-sec-policy.name}"
   healthCheck:

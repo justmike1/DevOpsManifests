@@ -4,7 +4,8 @@ module "gke" {
   name                       = var.cluster_name
   remove_default_node_pool   = true
   region                     = var.region
-  zones                      = ["${var.region}-c", "${var.region}-b", var.region == "us-east1" ? "${var.region}-d" : "${var.region}-f"]
+  regional                   = var.environment == "prod" ? true : false
+  zones                      = var.environment == "prod" ? ["${var.region}-c", "${var.region}-b", "${var.region}-d"] : ["${var.region}-c"]
   network                    = module.vpc.network_name
   subnetwork                 = "private-subnet"
   ip_range_pods              = "k8s-pod-range"
@@ -35,7 +36,7 @@ module "gke" {
       auto_repair        = true
       auto_upgrade       = true
       service_account    = format("%s@%s.iam.gserviceaccount.com", var.cluster_name, var.project_id)
-      preemptible        = false
+      preemptible        = var.environment == "prod" ? false : true
       initial_node_count = 1
     },
     {
@@ -54,7 +55,7 @@ module "gke" {
       auto_repair        = true
       auto_upgrade       = true
       service_account    = format("%s@%s.iam.gserviceaccount.com", var.cluster_name, var.project_id)
-      preemptible        = false
+      preemptible        = var.environment == "prod" ? false : true
       initial_node_count = 0
     },
   ]
@@ -113,6 +114,7 @@ module "gke" {
   }
 
   depends_on = [
-    google_service_account.cluster-sa
+    google_service_account.cluster-sa,
+    google_project_service.project_services
   ]
 }

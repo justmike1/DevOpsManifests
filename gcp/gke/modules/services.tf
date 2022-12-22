@@ -1,70 +1,16 @@
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service
-resource "google_project_service" "compute" {
-  service                    = "compute.googleapis.com"
-  disable_dependent_services = true
-}
 
-resource "google_project_service" "container" {
-  service                    = "container.googleapis.com"
-  disable_dependent_services = true
+locals {
+  services = ["container.googleapis.com", "servicenetworking.googleapis.com", "cloudscheduler.googleapis.com", "pubsub.googleapis.com", "artifactregistry.googleapis.com", "cloudkms.googleapis.com", "storage-api.googleapis.com", "storage-component.googleapis.com", "secretmanager.googleapis.com", "sqladmin.googleapis.com"]
 }
-
-resource "google_project_service" "certificate-authority-service" {
-  service                    = "privateca.googleapis.com"
+resource "google_project_service" "project_services" {
+  for_each                   = toset(var.environment != "prod" ? local.services : [])
+  service                    = each.key
   disable_dependent_services = true
-}
 
-resource "google_project_service" "networking-service" {
-  service                    = "servicenetworking.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "scheduler-service" {
-  service                    = "cloudscheduler.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "pubsub-service" {
-  service                    = "pubsub.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "artifactregistry-service" {
-  service                    = "artifactregistry.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "cloudbuild-service" {
-  service                    = "cloudbuild.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "cloudrun-service" {
-  service                    = "run.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "cloudkms-service" {
-  service                    = "cloudkms.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "storage-api-service" {
-  service                    = "storage-api.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "storage-component-service" {
-  service                    = "storage-component.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "secretmanager-service" {
-  service                    = "secretmanager.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "cloudfunctions-service" {
-  service                    = "cloudfunctions.googleapis.com"
-  disable_dependent_services = true
+  # DON'T DESTROY THIS RESOURCE, IF YOU WANT TO THEN ONLY REMOVE IT FROM STATE
+  # RUN "terraform state rm module.gke-cluster.google_project_service.project_services"
+  lifecycle {
+    prevent_destroy = true
+  }
 }
