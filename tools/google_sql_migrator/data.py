@@ -1,16 +1,13 @@
 import argparse
 from dataclasses import dataclass
 
+
 @dataclass(init=True)
 class Data:
     parser = argparse.ArgumentParser(description="Process export data.")
 
     # export data
-    parser.add_argument(
-        "--ex_project",
-        type=str,
-        help="which project to check on?"
-    )
+    parser.add_argument("--ex_project", type=str, help="which project to check on?")
     parser.add_argument(
         "--bucket",
         type=str,
@@ -18,18 +15,11 @@ class Data:
         default="gs://import_export_db/python",
     )
     parser.add_argument(
-        "--ex_databases",
-        nargs="*",
-        type=str,
-        help="which databases to export?"
+        "--ex_databases", nargs="*", type=str, help="which databases to export?"
     )
 
     # import data
-    parser.add_argument(
-        "--im_project",
-        type=str,
-        help="which project to check on?"
-    )
+    parser.add_argument("--im_project", type=str, help="which project to check on?")
     parser.add_argument("--ex_sql", type=str, help="google cloud sql id")
     parser.add_argument("--im_sql", type=str, help="google cloud sql id", default=False)
 

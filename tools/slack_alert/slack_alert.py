@@ -1,5 +1,5 @@
-import os
 import json
+import os
 from dataclasses import dataclass
 
 import requests as rq
@@ -21,7 +21,9 @@ class AlertData:
     developers: str = os.getenv("DEVELOPERS")
 
     def post_alert(self) -> rq.Response:
-        parsed_devs: dict = {dev:id for dev,id in dict(json.loads(self.developers)).items()}
+        parsed_devs: dict = {
+            dev: id for dev, id in dict(json.loads(self.developers)).items()
+        }
         headers = {
             "Content-type": "application/json",
         }

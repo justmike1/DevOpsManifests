@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# run as: ./test_args --namespace mike --test true
+scripts_folder=$(dirname "${BASH_SOURCE[0]}")
+. $scripts_folder/utils.sh
 
-. ./bash_utils.sh
+printf "run as: ./scripts/test_args.sh --namespace mike --test true"
 
 # default args
 namespace=
