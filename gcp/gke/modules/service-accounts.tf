@@ -63,23 +63,40 @@ resource "kubernetes_secret" "gcr-json-key" {
   ]
 }
 
-resource "google_service_account_key" "externaldns_sa_key" {
-  count              = var.clouddns_sa_email != null ? 1 : 0
-  service_account_id = var.clouddns_sa_email
-}
 
-resource "kubernetes_secret" "external-dns-sa" {
-  for_each = toset(["default", kubernetes_namespace.ingress-ns.metadata.0.name])
-  metadata {
-    name      = "external-dns-sa"
-    namespace = each.key
-  }
-  data = {
-    "credentials.json" = base64decode(google_service_account_key.externaldns_sa_key[0].private_key)
-  }
+resource "google_service_account" "external-dns-sa" {
+  account_id   = "external-dns-sa"
+  project      = var.project_id
+  display_name = "A service account that was made for external-dns service"
 
   depends_on = [
-    google_service_account_key.externaldns_sa_key,
-    kubernetes_namespace.environment_ns
+    helm_release.ingress-controller
   ]
 }
+
+resource "google_project_iam_binding" "dns_project_admin" {
+  project = var.dns_project
+  role    = "roles/dns.admin"
+
+  members = [
+    "serviceAccount:${google_service_account.external-dns-sa.email}",
+  ]
+
+  depends_on = [
+    google_service_account.external-dns-sa
+  ]
+}
+
+resource "google_service_account_iam_binding" "dns-admin-account-iam" {
+  service_account_id = google_service_account.external-dns-sa.name
+  role               = "roles/iam.workloadIdentityUser"
+
+  members = [
+    "serviceAccount:${var.project_id}.svc.id.goog[${kubernetes_namespace.ingress-ns.metadata.0.name}/external-dns]",
+  ]
+
+  depends_on = [
+    google_project_iam_binding.dns_project_admin
+  ]
+}
+
