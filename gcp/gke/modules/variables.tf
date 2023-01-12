@@ -103,12 +103,6 @@ variable "artifactory_sa_email" {
   default     = null
 }
 
-variable "clouddns_sa_email" {
-  type        = string
-  description = "already made service account to sync records in google CloudDNS"
-  default     = null
-}
-
 variable "scheduler_jobs" {
   type        = map(list(string))
   description = "scheduler jobs to create, schema: {'name': ['cron_pattern', 'time_zone']}"
