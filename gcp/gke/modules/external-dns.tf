@@ -1,23 +1,16 @@
 resource "helm_release" "external-dns" {
   name             = "external-dns"
   chart            = "external-dns"
-  version          = "1.11.0"
+  version          = "1.12.0"
   repository       = "https://kubernetes-sigs.github.io/external-dns"
   namespace        = kubernetes_namespace.ingress-ns.metadata.0.name
-  create_namespace = true
+  create_namespace = false
   values = [<<EOF
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: ${google_service_account.external-dns-sa.email} 
 nodeSelector:
   iam.gke.io/gke-metadata-server-enabled: "true"
-env:
-  - name: GOOGLE_APPLICATION_CREDENTIALS
-    value: /etc/secrets/service-account/credentials.json
-extraVolumes:
-  - name: google-service-account
-    secret:
-      secretName: external-dns-sa
-extraVolumeMounts:
-  - name: google-service-account
-    mountPath: /etc/secrets/service-account/
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
@@ -54,14 +47,9 @@ affinity:
     name  = "domainFilters[0]"
     value = var.domain
   }
-  set {
-    name  = "serviceAccount.name"
-    value = split("@", var.clouddns_sa_email)[0]
-  }
 
   depends_on = [
     module.gke,
-    helm_release.ingress-controller,
-    kubernetes_secret.external-dns-sa
+    google_service_account_iam_binding.dns-admin-account-iam
   ]
 }
