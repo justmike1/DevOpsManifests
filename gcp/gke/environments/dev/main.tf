@@ -11,7 +11,6 @@ module "gke-cluster" {
 
   # service accounts secrets settings
   artifactory_sa_email = "artifacts-sa-rw@art-project.iam.gserviceaccount.com"
-  clouddns_sa_email    = "project-num-compute@developer.gserviceaccount.com"
 
   # github runner settings
   enable_github_runner = 1
