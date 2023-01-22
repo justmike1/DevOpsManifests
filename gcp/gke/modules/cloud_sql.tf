@@ -66,7 +66,7 @@ module "sql-db" {
 
   // Master configurations
   tier                            = var.sql_tier
-  region                          = var.sql_region ? var.sql_region : var.region
+  region                          = var.sql_region != null ? var.sql_region : var.region
   disk_size                       = var.sql_disk_size
   disk_type                       = "PD_SSD"
   zone                            = "${var.region}-c"
