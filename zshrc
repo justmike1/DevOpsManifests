@@ -120,13 +120,6 @@ alias ls="ll --color=auto"
 alias python="python3"
 alias k="kubectl"
 
-# velotix aliases
-alias gke_dev="gcloud container clusters get-credentials dev-gke --region me-west1 --project vel-dev"
-alias gke_misc="gcloud container clusters get-credentials misc-gke --region me-west1 --project velotix-global"
-alias gke_demo="gcloud container clusters get-credentials demo-gke --region me-west1-c --project vel-prod"
-alias gke_sprint="gcloud container clusters get-credentials sprint-gke --region me-west1-c --project vel-sprint"
-alias connect_gitea="gke_misc; k port-forward svc/gitea-http 3000:3000 -n gitea &"
-
 # git aliases
 alias gs='git status'
 alias ga='git add'
