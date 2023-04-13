@@ -104,7 +104,7 @@ source $ZSH/oh-my-zsh.sh
 
 # env exports
 export KUBE_CONFIG_PATH=~/.kube/config
-export USE_GKE_GCLOUD_AUTH_PLUGIN=False
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -119,6 +119,29 @@ alias vim="nvim"
 alias ls="ll --color=auto"
 alias python="python3"
 alias k="kubectl"
+
+# velotix aliases
+alias gke_dev="gcloud container clusters get-credentials dev-gke --region me-west1 --project vel-dev"
+alias gke_misc="gcloud container clusters get-credentials misc-gke --region me-west1 --project velotix-global"
+alias gke_demo="gcloud container clusters get-credentials demo-gke --region me-west1-c --project vel-prod"
+alias gke_sprint="gcloud container clusters get-credentials sprint-gke --region me-west1-c --project vel-sprint"
+alias connect_gitea="gke_misc; k port-forward svc/gitea-http 3000:3000 -n gitea &"
+
+# git aliases
+alias gs='git status'
+alias ga='git add'
+alias gb='git branch'
+alias gc='git commit -v -s'
+alias gd='git diff'
+alias gco='git checkout'
+alias glog='git log --oneline --decorate --color --graph'
+alias gp='git push'
+alias gl='git pull'
+alias gr='git remote'
+alias grv='git remote -v'
+alias gcl='git clone'
+alias gm='git merge'
+alias gf='git fetch'
 
 # thefuck plugin
 eval $(thefuck --alias)
@@ -139,3 +162,8 @@ export CPPFLAGS="-I/opt/homebrew/opt/openjdk@11/include"
 # node
 export PATH="/opt/homebrew/opt/node@14/bin:$PATH"
 export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql@5.7/bin:$PATH"
+export PATH="/Users/mikejoseph/bin:$PATH"
+
+# docker
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
